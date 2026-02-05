@@ -20,6 +20,9 @@ This repository contains hands-on projects for building expertise in Azure IaC, 
 
 ## Learning Roadmap
 - [x] Week 1-2: Environment setup and Git basics
+  - [x] Day 1: Environment setup and tool installation
+  - [x] Day 2: Project structure and version control
+  - [x] Day 3: Git branching workflow
 - [ ] Week 3-4: First Bicep infrastructure modules
 - [ ] Week 5-6: Expanding IaC capabilities
 - [ ] Week 7-8: Introduction to Azure DevOps pipelines
