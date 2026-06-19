@@ -32,3 +32,6 @@ logs/
 bin/
 obj/
 dist/
+
+# ARM JSON output from Bicep builds
+modules/**/*.json
