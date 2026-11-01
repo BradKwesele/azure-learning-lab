@@ -1,0 +1,34 @@
+# pipelines/hello-world.yml
+# Exercise 1: Prove GitHub → Azure DevOps pipeline connection works
+# No Azure subscription access needed — runs entirely on the build agent
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - pipelines/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - script: echo "Pipeline is running on $(Agent.MachineName)"
+    displayName: 'Verify agent is alive'
+
+  - script: |
+      echo "Repository: $(Build.Repository.Name)"
+      echo "Branch: $(Build.SourceBranchName)"
+      echo "Commit: $(Build.SourceVersion)"
+      echo "Build ID: $(Build.BuildId)"
+      echo "Triggered by: $(Build.Reason)"
+    displayName: 'Print build context'
+
+  - script: |
+      echo "Listing repo contents:"
+      ls -la
+      echo ""
+      echo "Listing modules directory:"
+      ls -la modules/
+    displayName: 'Verify repo checkout'
