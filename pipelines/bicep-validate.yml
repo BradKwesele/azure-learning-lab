@@ -1,0 +1,44 @@
+# pipelines/bicep-validate.yml
+# Exercise 2: Validate Bicep modules without deploying anything
+# Runs linting and compilation — no Azure subscription needed
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - modules/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - script: az version
+    displayName: 'Check Azure CLI version'
+
+  - script: az bicep version
+    displayName: 'Check Bicep CLI version'
+
+  - script: az bicep lint --file modules/main.bicep
+    displayName: 'Lint master orchestrator'
+
+  - script: |
+      echo "=== Compiling individual modules ==="
+      for file in $(find modules -name '*.bicep' -not -name 'main.bicep'); do
+        echo ""
+        echo "--- Building: $file ---"
+        az bicep build --file "$file" --stdout > /dev/null
+        if [ $? -eq 0 ]; then
+          echo "PASS: $file"
+        else
+          echo "FAIL: $file"
+          exit 1
+        fi
+      done
+    displayName: 'Compile all Bicep modules'
+
+  - script: |
+      az bicep build --file modules/main.bicep --stdout > /dev/null
+      echo "Master orchestrator compiles successfully"
+    displayName: 'Compile master orchestrator'
